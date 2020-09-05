@@ -13,8 +13,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Player
+  - Tilemap
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Tilemap
+    uniqueID: 2706109031
+    locked: 0
+  - name: Player
+    uniqueID: 3563160239
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
