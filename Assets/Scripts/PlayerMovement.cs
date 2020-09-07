@@ -17,20 +17,26 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate() {
         direction = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
 
+        Debug.Log($"dir_x: {direction.x}, speed: {Mathf.Abs(direction.x) + Mathf.Abs(direction.y)}");
+
         if(direction != Vector3.zero){
             MoveCharacter();
+        }
+        else{
+            animator.SetFloat("speed", Mathf.Abs(direction.x) + Mathf.Abs(direction.y));
         }
     }
 
     private void MoveCharacter() {
         animator.SetFloat("direction_x", direction.x);
         animator.SetFloat("direction_y", direction.y);
+        animator.SetFloat("speed", Mathf.Abs(direction.x) + Mathf.Abs(direction.y));
 
-        // Debug.Log(direction.x);
-
+        // flips sprite depending on which way the player is heading
         if(direction.x < 0) {
             transform.localRotation = Quaternion.Euler(0, 180, 0);
-        } else {
+            
+        } else if(direction.x > 0) {
             transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
