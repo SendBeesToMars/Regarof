@@ -73,5 +73,5 @@ crashlytics-build.properties
 *.afphoto
 *.afphoto.meta
 
-Assets/Scenes/SampleScene.unity
+*.unity
 
