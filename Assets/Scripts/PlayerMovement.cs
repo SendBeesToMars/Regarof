@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("direction_x", direction.x);
         animator.SetFloat("direction_y", direction.y);
 
-        Debug.Log(direction.x);
+        // Debug.Log(direction.x);
 
         if(direction.x < 0) {
             transform.localRotation = Quaternion.Euler(0, 180, 0);
