@@ -8031,8 +8031,8 @@ GameObject:
   - component: {fileID: 1953380856}
   - component: {fileID: 1953380860}
   - component: {fileID: 1953380862}
-  - component: {fileID: 1953380859}
   - component: {fileID: 1953380861}
+  - component: {fileID: 1953380859}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -8139,6 +8139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a54bc4b8eeea36a488f7c30c3911bfd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1953380861}
   speed: 4
 --- !u!61 &1953380860
 BoxCollider2D:

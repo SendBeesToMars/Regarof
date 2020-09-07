@@ -4,33 +4,37 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // private Rigidbody2D rigid_body;
+    private Vector3 direction;
+
+    public Animator animator;
     public float speed;
-    private Rigidbody2D myRigidbody;
-    private Vector3 change;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        myRigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+    void Start() {
+        // rigid_body = GetComponent<Rigidbody2D>();
     }
 
     void FixedUpdate() {
-        change = Vector3.zero;
-        change.x = Input.GetAxisRaw("Horizontal");
-        change.y = Input.GetAxisRaw("Vertical");
-        if(change != Vector3.zero){
+        direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0.0f);
+
+        if(direction != Vector3.zero){
             MoveCharacter();
         }
     }
 
-    void MoveCharacter()
-    {
-        myRigidbody.MovePosition(transform.position + change.normalized * speed * Time.deltaTime);
+    private void MoveCharacter() {
+        animator.SetFloat("direction_x", direction.x);
+        animator.SetFloat("direction_y", direction.y);
+
+        Debug.Log(direction.x);
+
+        if(direction.x < 0) {
+            transform.localRotation = Quaternion.Euler(0, 180, 0);
+        } else {
+            transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+
+        // rigid_body.MovePosition(transform.position + direction.normalized * speed * Time.deltaTime);
+        transform.position = transform.position + direction.normalized * speed * Time.deltaTime;
     }
 }
