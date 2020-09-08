@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate() {
         direction = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
 
-        Debug.Log($"dir_x: {direction.x}, speed: {Mathf.Abs(direction.x) + Mathf.Abs(direction.y)}");
+        // Debug.Log($"dir_x: {direction.x}, speed: {Mathf.Abs(direction.x) + Mathf.Abs(direction.y)}");
 
         if(direction != Vector3.zero){
             MoveCharacter();

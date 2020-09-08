@@ -23,7 +23,7 @@ public class MouseBehaviour : MonoBehaviour {
             }
 
             tilemap_selection.SetTile(previous, null);
-            Debug.Log(current);
+            // Debug.Log(current);
             
             previous = current;
         }
