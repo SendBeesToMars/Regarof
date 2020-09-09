@@ -5,8 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class TileGenerator : MonoBehaviour {
 
-    public Tilemap tilemap_generated;
+    public Tilemap tilemap_generated_fill;
+    public Tilemap tilemap_generated_boundary;
     public Tile fill_tile;
+    public Tile boundary_tile;
 
     [Range(0.0f, 1.0f)]
     public float magnitude = 0.75f;
@@ -20,33 +22,25 @@ public class TileGenerator : MonoBehaviour {
     [Range(-1.0f, 0.0f)]
     public float border_fade_offset = -0.02f;
 
-    private float[,] height_map;
+    private int[,] ground_map;
     float[,] border_fade;
 
-    private int island_width = 16;
-    private int island_height = 16;
+    private int island_width = 24;
+    private int island_height = 24;
+    private int island_offset;
 
     private float seed;
     
     void Start() {
-        height_map = new float[island_width, island_height];
-        border_fade = GenerateBorderFade(island_width, island_height);
-
         Seed();  
+
+        island_offset = (island_width == island_height) ? island_width / 2 : 0;
     }
 
     void FixedUpdate() {
-        for(int x = 0; x < island_width; x++) {
-            for(int y = 0; y < island_height; y++) {
-                float noise = (Mathf.PerlinNoise(seed + (x * scale), seed + (y * scale)) * magnitude) + border_fade[x,y];
-
-                if(noise < cut_off) {
-                    tilemap_generated.SetTile(new Vector3Int(x, y, 0), fill_tile);
-                } else {
-                    tilemap_generated.SetTile(new Vector3Int(x, y, 0), null);
-                }
-            }
-        }
+        border_fade = GenerateBorderFade(island_width, island_height);
+        ground_map = GenerateGroundMap(island_width, island_height);
+        PopulateTileMap();
     }
 
     private float[,] GenerateBorderFade(int width, int height) {
@@ -77,6 +71,50 @@ public class TileGenerator : MonoBehaviour {
         }
 
         return border_fade;
+    }
+
+    private int[,] GenerateGroundMap(int width, int height) {
+        int[,] map = new int[width,height];
+
+        for(int x = 0; x < island_width; x++) {
+            for(int y = 0; y < island_height; y++) {
+                float noise = (Mathf.PerlinNoise(seed + (x * scale), seed + (y * scale)) * magnitude) + border_fade[x,y];
+                if(noise < cut_off) {
+                    map[x,y] = 1;
+                } else {
+                    map[x,y] = 0;
+                }
+            }
+        }
+        return map;
+    }
+
+    private void PopulateTileMap() {
+        for(int x = 0; x < island_width; x++) {
+            for(int y = 0; y < island_height; y++) {
+                tilemap_generated_fill.SetTile(GetGridCoordinates(x,y), (ground_map[x,y] == 1) ? fill_tile : GetBorderTile(x,y));
+            }
+        }
+    }
+
+    private Tile GetBorderTile(int x, int y) {
+        int neighbor_count = 0;
+        for(int i = x-1; i <= x+1; i++) {
+            for(int j = y-1; j <= y+1; j++) {
+                if((i <= 0 || i >= island_width || j <= 0 || j >= island_height) || (i == x && j == y)) 
+                    continue;
+                neighbor_count += ground_map[i,j];
+            }
+        }
+
+        if(neighbor_count != 0)
+            tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), boundary_tile);
+
+        return null;
+    }
+
+    private Vector3Int GetGridCoordinates(int x, int y) {
+        return new Vector3Int(x - island_offset, y - island_offset, 0);
     }
 
     [ContextMenu("Seed")]
