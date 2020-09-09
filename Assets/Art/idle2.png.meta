@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: f9307b5114110ef4cb5fc495d7906611
+guid: 223dcc94270738043b6ac9148e45659b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2973603732290048539
-    second: skipping2_0
+      213: -4243389574673483943
+    second: idle2_0
   - first:
-      213: -8632655617368744697
-    second: skipping2_1
+      213: -8683696539369610142
+    second: idle2_1
   - first:
-      213: -2453700560789167867
-    second: skipping2_2
+      213: 3569995279447393958
+    second: idle2_2
   - first:
-      213: 1610750349252305834
-    second: skipping2_3
+      213: 1193457304162379288
+    second: idle2_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -101,7 +101,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: skipping2_0
+      name: idle2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,14 +115,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ed631a0923abb6d0800000000000000
-      internalID: -2973603732290048539
+      spriteID: 957bdfd0aa37c15c0800000000000000
+      internalID: -4243389574673483943
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skipping2_1
+      name: idle2_1
       rect:
         serializedVersion: 2
         x: 16
@@ -136,14 +136,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 70d947a2475a23880800000000000000
-      internalID: -8632655617368744697
+      spriteID: 264e59171005d7780800000000000000
+      internalID: -8683696539369610142
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skipping2_2
+      name: idle2_2
       rect:
         serializedVersion: 2
         x: 32
@@ -157,14 +157,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5012cf81754b2fdd0800000000000000
-      internalID: -2453700560789167867
+      spriteID: 6a68841cacb2b8130800000000000000
+      internalID: 3569995279447393958
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: skipping2_3
+      name: idle2_3
       rect:
         serializedVersion: 2
         x: 48
@@ -178,8 +178,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa3250598e88a5610800000000000000
-      internalID: 1610750349252305834
+      spriteID: 816a13d4813009010800000000000000
+      internalID: 1193457304162379288
       vertices: []
       indices: 
       edges: []
