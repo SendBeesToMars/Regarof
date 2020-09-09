@@ -5,9 +5,10 @@ using UnityEngine.Tilemaps;
 
 public class TileGenerator : MonoBehaviour {
 
-    public Tilemap tilemap_generated_fill;
+    public Tilemap tilemap_generated;
     public Tilemap tilemap_generated_boundary;
-    public Tile fill_tile;
+
+    public Tile[] ground_tiles;
     public Tile boundary_tile;
 
     [Range(0.0f, 1.0f)]
@@ -86,35 +87,172 @@ public class TileGenerator : MonoBehaviour {
                 }
             }
         }
+
+        map[6,6] = 0;
         return map;
     }
 
     private void PopulateTileMap() {
         for(int x = 0; x < island_width; x++) {
             for(int y = 0; y < island_height; y++) {
-                tilemap_generated_fill.SetTile(GetGridCoordinates(x,y), (ground_map[x,y] == 1) ? fill_tile : GetBorderTile(x,y));
+                tilemap_generated.SetTile(GetGridCoordinates(x,y), (ground_map[x,y] == 1) ? ground_tiles[25] : GetBorderTile(x,y));
             }
         }
     }
 
     private Tile GetBorderTile(int x, int y) {
-        int neighbor_count = 0;
+        byte byte_integer_value = 0;
+        int iteration_count = 0;
+
         for(int i = x-1; i <= x+1; i++) {
             for(int j = y-1; j <= y+1; j++) {
-                if((i <= 0 || i >= island_width || j <= 0 || j >= island_height) || (i == x && j == y)) 
+                if((i <= 0 || i >= island_width || j <= 0 || j >= island_height) || (i == x && j == y)) {
+                    iteration_count++;
                     continue;
-                neighbor_count += ground_map[i,j];
+                }
+
+                if(ground_map[i,j] == 1) {
+                    byte_integer_value += GetIntegerValue(iteration_count);
+                }
+
+                iteration_count++;
             }
         }
 
-        if(neighbor_count != 0)
+
+        //EDGES
+        if((byte_integer_value & 0b_1111_0000) == 0b_1111_0000)
+            return ground_tiles[32];
+
+        if((byte_integer_value & 0b_1111_0100) == 0b_0011_0000)
+            return ground_tiles[8];
+
+        if((byte_integer_value & 0b_1111_1000) == 0b_0110_0000)
+            return ground_tiles[17];
+
+        if((byte_integer_value & 0b_1111_0001) == 0b_1100_0000)
+            return ground_tiles[16];
+
+        if((byte_integer_value & 0b_1111_0010) == 0b_1001_0000)
+            return ground_tiles[7];
+
+        if((byte_integer_value & 0b_1111_0000) == 0b_0111_0000)
+            return ground_tiles[5];
+
+        if((byte_integer_value & 0b_1111_0000) == 0b_1110_0000)
+            return ground_tiles[6];
+
+        if((byte_integer_value & 0b_1111_0000) == 0b_1011_0000)
+            return ground_tiles[14];
+
+        if((byte_integer_value & 0b_1111_0000) == 0b_1101_0000)
+            return ground_tiles[15];
+
+        if((byte_integer_value & 0b_1111_0110) == 0b_0001_0000)
+            return ground_tiles[30];
+
+        if((byte_integer_value & 0b_1111_1001) == 0b_0100_0000)
+            return ground_tiles[31];
+
+        if((byte_integer_value & 0b_1111_0011) == 0b_1000_0000)
+            return ground_tiles[22];
+
+        if((byte_integer_value & 0b_1111_1100) == 0b_0010_0000)
+            return ground_tiles[23];
+
+
+
+        //CORNERS
+        if((byte_integer_value & 0b_1111_0011) == 0b_0000_0001)
+            return ground_tiles[26];
+
+        if((byte_integer_value & 0b_1111_0011) == 0b_0000_0010)
+            return ground_tiles[18];
+
+        if((byte_integer_value & 0b_1111_1100) == 0b_0000_0100)
+            return ground_tiles[19];
+
+        if((byte_integer_value & 0b_1111_1100) == 0b_0000_1000)
+            return ground_tiles[27];
+
+        if((byte_integer_value & 0b_1111_0011) == 0b_0000_0011)
+            return ground_tiles[28];
+
+        if((byte_integer_value & 0b_1111_1100) == 0b_0000_1100)
+            return ground_tiles[29];
+
+        if((byte_integer_value & 0b_0000_1001) == 0b_0000_1001)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_0011) == 0b_0000_0011)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_0110) == 0b_0000_0110)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_1100) == 0b_0000_1100)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_0111) == 0b_0000_0111)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_1110) == 0b_0000_1110)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_1101) == 0b_0000_1101)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_1011) == 0b_0000_1011)
+            return ground_tiles[47];
+
+        if((byte_integer_value & 0b_0000_0000) == 0b_0000_0000)
+            return null;
+
+
+        if((int)byte_integer_value > 0)
             tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), boundary_tile);
 
-        return null;
+
+        return ground_tiles[47];
     }
 
     private Vector3Int GetGridCoordinates(int x, int y) {
         return new Vector3Int(x - island_offset, y - island_offset, 0);
+    }
+
+    private byte GetIntegerValue(int iteration_count) {
+        byte value = 0;
+
+        switch (iteration_count) {
+            case 0:
+                value = 0b_0000_0100;
+                break;
+            case 1:
+                value = 0b_1000_0000;
+                break;
+            case 2:
+                value = 0b_0000_1000;
+                break;
+            case 3:
+                value = 0b_0100_0000;
+                break;
+            case 5:
+                value = 0b_0001_0000;
+                break;
+            case 6:
+                value = 0b_0000_0010;
+                break;
+            case 7:
+                value = 0b_0010_0000;
+                break;
+            case 8:
+                value = 0b_0000_0001;
+                break;
+            default:
+                break;
+        }
+
+        return value;
     }
 
     [ContextMenu("Seed")]
