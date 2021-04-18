@@ -38,12 +38,15 @@ public class TileGenerator : MonoBehaviour {
     void Start() {
         Seed();
         InitializeBitmasks();
+        Debug.Log(bitmask_in);
 
         border_fade = GenerateBorderFade(island_width, island_height);
         island_offset = (island_width == island_height) ? island_width / 2 : 0;
     }
 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
+        border_fade = GenerateBorderFade(island_width, island_height);
         ground_map = GenerateGroundMap(island_width, island_height);
         PopulateTileMap();
     }
