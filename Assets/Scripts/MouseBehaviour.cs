@@ -7,6 +7,9 @@ public class MouseBehaviour : MonoBehaviour {
 
     public Camera camera;
 
+    public GameObject go;
+
+    public Grid grid;
     public Tile tile;
     public Tilemap tilemap_selection;
     public Tilemap tilemap_fill;
@@ -17,7 +20,15 @@ public class MouseBehaviour : MonoBehaviour {
         Vector3Int player = tilemap_selection.WorldToCell(transform.position);
         Vector3Int current = tilemap_selection.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
 
-        if(current != previous) {
+        Vector3Int grid_position = grid.WorldToCell(current);
+
+        if (Input.GetMouseButtonDown(0)) {
+            // Debug.Log(grid_position.y);
+            // go.GetComponent<TileGenerator>().ground_map[grid_position.x + 8, grid_position.y + 8] = 1;
+            // go.GetComponent<TileGenerator>().PopulateTileMap();
+        }
+
+        if (current != previous) {
             if(Vector3.Distance(player, current) < 2.5 && tilemap_fill.GetTile(current) != null) {
                 tilemap_selection.SetTile(current, tile);
             }

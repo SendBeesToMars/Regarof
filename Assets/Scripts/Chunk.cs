@@ -1,104 +1,114 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TileGenerator : MonoBehaviour {
+public class Chunk : World {
 
-    public Tilemap tilemap_generated;
-    public Tilemap tilemap_generated_boundary;
+    public const int CHUNK_DIMENSION = 16;
 
-    public Tile[] ground_tiles;
-    public Tile boundary_tile;
-
-    [Range(0.0f, 1.0f)]
-    public float magnitude = 0.75f;
-
-    [Range(0.0f, 1.0f)]
-    public float cut_off = 0.4f;
-
-    [Range(0.0f, 1.0f)]
-    public float scale = 0.005f;
-    
-    [Range(0, 64)]
-    public int border = 25;
-
-    public int[,] ground_map;
-
-    private int island_width = 16;
-    private int island_height = 16;
-    private int island_offset;
-
+    private float chunk_seed;
     private byte[] bitmask_in;
     private byte[] bitmask_out;
 
-    private float seed;
+    public vector coord;
+    public int[,] island_map;
+    public int[,] tile_map;
     
-    void Start() {
+    private Tile[] tiles;
+    
+
+    public Chunk(int x, int y, Tile[] tiles) {
+        this.tiles = tiles;
+
         InitializeBitmasks();
 
-        // string fade_values = "";
-        // for(int x = 0; x < island_width; x++) {
-        //     for(int y = 0; y < island_height; y++) {
-        //         fade_values += GetBorderFade(x, y).ToString("0.00") + " ,";
-        //     }
-        //     fade_values += "\n";
-        // }
-        // Debug.Log(fade_values);
-        
-        ground_map = GenerateGroundMap(island_width, island_height);
-        island_offset = (island_width == island_height) ? island_width / 2 : 0;
+        coord = v(x,y);
+        island_map = new int[CHUNK_DIMENSION, CHUNK_DIMENSION];
+        tile_map = new int[CHUNK_DIMENSION, CHUNK_DIMENSION];
+
+        SeedChunk();
+        GenerateIsland(scale, magnitude, border_weight, cut_off);
     }
 
-    void FixedUpdate()
-    {
-        ground_map = GenerateGroundMap(island_width, island_height);
+    // public void PrintIsland(ref Tilemap tilemap) {
+    //     for(int x = 0; x < CHUNK_DIMENSION; x++) {
+    //         for(int y = 0; y < CHUNK_DIMENSION; y++) {
+    //             if(island_map[x,y] == 1)
+    //                 tilemap.SetTile(new Vector3Int((coord.x * CHUNK_DIMENSION) + x, (coord.y * CHUNK_DIMENSION) + y, 0), tile);
+    //             else
+    //                 tilemap.SetTile(new Vector3Int((coord.x * CHUNK_DIMENSION) + x, (coord.y * CHUNK_DIMENSION) + y, 0), tile2);
+    //         }
+    //     }
+    // }
+
+    public void GenerateIsland(float scale, float magnitude, float border_weight, float cut_off) {
+        float[,] border_map = GenerateBorderMap(border_weight);
+
+        for(int x = 0; x < CHUNK_DIMENSION; x++) {
+            for(int y = 0; y < CHUNK_DIMENSION; y++) {
+                // float noise = (Mathf.PerlinNoise(chunk_seed + (coord.x * CHUNK_DIMENSION + x) * scale, chunk_seed + (coord.y * CHUNK_DIMENSION + y) * scale) * magnitude) * GetBorderFade(x, y, border_weight);
+                float noise = (Mathf.PerlinNoise(chunk_seed + (coord.x * CHUNK_DIMENSION + x) * scale, chunk_seed + (coord.y * CHUNK_DIMENSION + y) * scale) * magnitude) / border_map[x,y];
+                island_map[x,y] = noise > cut_off ? 1 : 0;
+            }
+        }
         PopulateTileMap();
     }
 
-    private float GetBorderFade(int x, int y, int weight = 25) {
-        float dist = Mathf.Pow(x - 7.5f, 2) + Mathf.Pow(y - 7.5f, 2);
-        return dist < weight ? 1 : 1 / (dist / weight);
-    }
-
-    private int[,] GenerateGroundMap(int width, int height) {
-        int[,] map = new int[width,height];
-
-        for(int x = 0; x < island_width; x++) {
-            for(int y = 0; y < island_height; y++) {
-                float noise = (Mathf.PerlinNoise(seed + (x * scale), seed + (y * scale)) * magnitude) * GetBorderFade(x, y, border);
-                map[x,y] = noise > cut_off ? 1 : 0;
+    private void PopulateTileMap() {
+        for(int x = 0; x < CHUNK_DIMENSION; x++) {
+            for(int y = 0; y < CHUNK_DIMENSION; y++) {
+                tile_map[x,y] = island_map[x,y] == 1 ? 25 : GetBorderTile(x,y);
             }
         }
-
-        return map;
     }
 
-    public void PopulateTileMap() {
-        for(int x = 0; x < island_width; x++) {
-            for(int y = 0; y < island_height; y++) {
-                if(ground_map[x,y] == 1) {
-                    tilemap_generated.SetTile(GetGridCoordinates(x,y), ground_tiles[25]);
-                    tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), null);
+    private float[,] GenerateBorderMap(float border_weight) {
+        if(CHUNK_DIMENSION%2 != 0 || CHUNK_DIMENSION%2 != 0) {
+            Debug.LogError("GenerateBorderFade(width, height) requires even values for both width and height.");
+            return new float[CHUNK_DIMENSION, CHUNK_DIMENSION];
+        }
+
+        float[,] border_fade = new float[CHUNK_DIMENSION, CHUNK_DIMENSION];
+
+        int range_x = CHUNK_DIMENSION/2;
+        int range_y = CHUNK_DIMENSION/2;
+
+        for(int x = 0; x < CHUNK_DIMENSION; x++) {
+            for(int y = 0; y < CHUNK_DIMENSION; y++) {
+                if(x < range_x) {
+                    border_fade[x,y] = 1.0f / (x + 1) + border_weight;
                 } else {
-                    tilemap_generated.SetTile(GetGridCoordinates(x,y), GetBorderTile(x,y));
+                    border_fade[x,y] = 1.0f / (CHUNK_DIMENSION - x) + border_weight;
+                }
+
+                if(y < range_y) {
+                    border_fade[x,y] += 1.0f / (y + 1) + border_weight;
+                } else {
+                    border_fade[x,y] += 1.0f / (CHUNK_DIMENSION - y) + border_weight;
                 }
             }
         }
-    }
 
-    private Tile GetBorderTile(int x, int y) {
+        return border_fade;
+    }
+    
+    private float GetBorderFade(int x, int y, int weight = 25) {
+        int dist = Mathf.FloorToInt(Mathf.Pow(x - (CHUNK_DIMENSION / 2 - 0.5f), 2) + Mathf.Pow(y - (CHUNK_DIMENSION / 2 - 0.5f), 2));
+        return dist < weight ? 1 : 1 / (dist / weight);
+    }
+    
+
+    private int GetBorderTile(int x, int y) {
         byte byte_value = 0;
         int iteration_count = 0;
 
         for(int i = x-1; i <= x+1; i++) {
             for(int j = y-1; j <= y+1; j++) {
-                if ((i <= 0 || i >= island_width || j <= 0 || j >= island_height) || (i == x && j == y)) {
+                if ((i <= 0 || i >= CHUNK_DIMENSION || j <= 0 || j >= CHUNK_DIMENSION) || (i == x && j == y)) {
                     iteration_count++;
                     continue;
                 }
 
-                if (ground_map[i,j] == 1) {
+                if (island_map[i,j] == 1) {
                     byte_value += GetByteValue(iteration_count);
                 }
 
@@ -106,24 +116,20 @@ public class TileGenerator : MonoBehaviour {
             }
         }
  
-        if(byte_value > 0)
-            tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), boundary_tile);
-        else
-            tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), null);
+        // if(byte_value > 0)
+        //     tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), boundary_tile);
+        // else
+        //     tilemap_generated_boundary.SetTile(GetGridCoordinates(x,y), null);
 
         for(int index = 0; index < bitmask_in.Length; index++) {
             if(index == 25)
                 continue;
 
             if((byte_value & bitmask_in[index]) == bitmask_out[index])
-                return ground_tiles[index];
+                return index;
         }
 
-        return null;
-    }
-
-    private Vector3Int GetGridCoordinates(int x, int y) {
-        return new Vector3Int(x - island_offset, y - island_offset, 0);
+        return -1;
     }
 
     private byte GetByteValue(int iteration_count) {
@@ -157,8 +163,8 @@ public class TileGenerator : MonoBehaviour {
 //
 //        0b_DCBA_4321
 
-        bitmask_in = new byte[ground_tiles.Length];
-        bitmask_out = new byte[ground_tiles.Length];
+        bitmask_in = new byte[tiles.Length];
+        bitmask_out = new byte[tiles.Length];
 
         bitmask_in[0] = 0b_1111_0010;
         bitmask_out[0] = 0b_1001_0010;
@@ -258,9 +264,8 @@ public class TileGenerator : MonoBehaviour {
         bitmask_in[46] = 0b_1111_1111;
         bitmask_out[46] = 0b_0000_1010;
     }
-
-    [ContextMenu("Seed")]
-    public void Seed() {
-        seed = Random.Range(-2147483.0f, 2147483.0f);
+    
+    public void SeedChunk() {
+        chunk_seed = Random.Range(-2147483.0f, 2147483.0f);
     }
 }
