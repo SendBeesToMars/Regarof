@@ -7,36 +7,34 @@ public class MouseBehaviour : MonoBehaviour {
 
     public Camera camera;
 
-    public GameObject go;
-
-    public Grid grid;
-    public Tile tile;
-    public Tilemap tilemap_selection;
-    public Tilemap tilemap_fill;
+    public World world;
 
     private Vector3Int previous;
 
-    void LateUpdate() {
-        Vector3Int player = tilemap_selection.WorldToCell(transform.position);
-        Vector3Int current = tilemap_selection.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
+    void Start() {
 
-        Vector3Int grid_position = grid.WorldToCell(current);
+    }
+
+    void LateUpdate() {
+        Vector3Int player_coord = world.grid.WorldToCell(transform.position);
+        Vector3Int mouse_coord = world.grid.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
 
         if (Input.GetMouseButtonDown(0)) {
-            // Debug.Log(grid_position.y);
-            // go.GetComponent<TileGenerator>().ground_map[grid_position.x + 8, grid_position.y + 8] = 1;
-            // go.GetComponent<TileGenerator>().PopulateTileMap();
+            Vector tile_coord = new Vector(mouse_coord.x, mouse_coord.y);
+            Debug.Log(tile_coord);
+            Debug.Log(world.GetTileData(tile_coord).land);
+            TileDataHandler.Toggle(world.GetTileData(tile_coord));
         }
 
-        if (current != previous) {
-            if(Vector3.Distance(player, current) < 2.5 && tilemap_fill.GetTile(current) != null) {
-                tilemap_selection.SetTile(current, tile);
-            }
+        // if (mouse_coord != previous) {
+        //     if(Vector3.Distance(player_coord, mouse_coord) < 2.5 && tilemap_fill.GetTile(mouse_coord) != null) {
+        //         tilemap_selection.SetTile(mouse_coord, tile);
+        //     }
 
-            tilemap_selection.SetTile(previous, null);
-            // Debug.Log(current);
+        //     tilemap_selection.SetTile(previous, null);
+        //     // Debug.Log(current);
             
-            previous = current;
-        }
+        //     previous = mouse_coord;
+        // }
     }
 }

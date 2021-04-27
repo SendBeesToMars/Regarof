@@ -3,53 +3,96 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class World : MonoBehaviour {
+    public Camera camera;
 
     public float seed;
 
-    public Grid world_grid;
-    public Tilemap world_tilemap;
+    public Grid grid;
+    public Tilemap tilemap;
 
     public Tile[] ground_tiles;
     // public Tile tile;
     // public Dictionary<vector, Chunk> chunks;
-    public List<Chunk> chunks;
+    public Dictionary<Vector, Chunk> chunks { get; set; }
     
-    public float scale = 0.15f;
+    public float scale = 0.1f;
     public float magnitude = 0.75f;
-    public float border_weight = 0.1f;
+    public float border_weight = 0.2f;
     public float cut_off = 0.3f;
     
     void Start() {
+        Seed();
 
-        // new Chunk(-1,-1).PrintIsland(ref world_tilemap);
-
-        // chunks = new Dictionary<vector, Chunk>();
-        chunks = new List<Chunk>();
+        chunks = new Dictionary<Vector, Chunk>();
         for (int i = -3; i < 3; i++) {
             for (int j = -3; j < 3; j++) {
-                // chunks.Add(v(i,j), new Chunk(i,j));
-                // chunks.Add(v(0,0), new Chunk(0,0));
-                chunks.Add(new Chunk(i, j, ground_tiles));
+                chunks.Add(v(i,j), new Chunk(v(i,j), this));
             }
         }
-        Seed();
+
+        TileDataHandler.world = this;
+
+        foreach(Chunk chunk in chunks.Values) {
+            for(int x = 0; x < Chunk.CHUNK_DIMENSION; x++) {
+                for(int y = 0; y < Chunk.CHUNK_DIMENSION; y++) {
+                    TileDataHandler.UpdateNeighbours(chunk.tiles[x,y]);
+                    TileDataHandler.UpdateTileIndex(chunk.tiles[x,y]);
+                    tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), ground_tiles[chunk.tiles[x,y].tile_index]);
+                }
+            }
+        }
     }
 
     void FixedUpdate() {
-        foreach(Chunk chunk in chunks) {
-            chunk.GenerateIsland(scale, magnitude, border_weight, cut_off);
+        
+        foreach(Chunk chunk in chunks.Values) {
+            // chunk.GenerateIsland(scale, magnitude, border_weight, cut_off);
             for(int x = 0; x < Chunk.CHUNK_DIMENSION; x++) {
                 for(int y = 0; y < Chunk.CHUNK_DIMENSION; y++) {
-                    if (chunk.tile_map[x,y] >= 0)
-                        world_tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), ground_tiles[chunk.tile_map[x,y]]);
-                    else
-                        world_tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), null);
+                    // if (chunk.tiles[x,y].tile_index != -1) {
+                        tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), ground_tiles[chunk.tiles[x,y].tile_index]); 
+                    // } else
+                    //     tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), null);
                 }
             }
-            // chunk.PrintIsland(ref world_tilemap);
         }
+
+        // TileDataHandler.Toggle();
     }
 
+    void LateUpdate() {
+        Vector3Int player = grid.WorldToCell(transform.position);
+        Vector3Int current = grid.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
+
+        // Vector3Int grid_position = world_grid.WorldToCell(current);
+
+        // if (Input.GetMouseButtonDown(0)) {
+        //     // Debug.Log(GetTileData(v(current.x, current.y)).land);
+        // }
+    }
+
+    public TileDataModel GetTileData(Vector v) {
+        Vector c = GetChunkCoords(v);
+        Vector v1 = GetTileCoordsRelativeToChunk(v);
+
+        if(!chunks.ContainsKey(c))
+            return new TileDataModel(v1);
+
+        // Debug.Log(c + " " + v + " " + v1 + " " + chunks[c].tiles[v1.x, v1.y]);
+        // Debug.Log(c + " " + v1);
+        return chunks[c].tiles[v1.x, v1.y];
+    }
+
+    public Vector GetChunkCoords(Vector v) {
+        return new Vector(v.x < 0 ? v.x - Chunk.CHUNK_DIMENSION : v.x, v.y < 0 ? v.y - Chunk.CHUNK_DIMENSION : v.y) / Chunk.CHUNK_DIMENSION;
+    }
+
+    private Vector GetTileCoordsRelativeToChunk(Vector v) {
+        v.x %= Chunk.CHUNK_DIMENSION;
+        v.y %= Chunk.CHUNK_DIMENSION;
+        return new Vector(v.x < 0 ? Chunk.CHUNK_DIMENSION + v.x : v.x, v.y < 0 ? Chunk.CHUNK_DIMENSION + v.y : v.y);
+    }
+    
     public void updateChunkIslandScale(float scale) {
         this.scale = scale;
     }
@@ -66,14 +109,14 @@ public class World : MonoBehaviour {
         this.cut_off = cut_off;
     }
 
-    public static vector v(int x, int y) {
-        return new vector(x, y);
+    public static Vector v(int x, int y) {
+        return new Vector(x, y);
     }
 
     [ContextMenu("Seed")]
     public void Seed() {
         seed = Random.Range(-2147483.0f, 2147483.0f);
-        foreach(Chunk chunk in chunks)
-            chunk.SeedChunk();
+        // foreach(Chunk chunk in chunks)
+        //     chunk.SeedChunk();
     }
 }
