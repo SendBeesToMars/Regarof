@@ -14,6 +14,21 @@ TextureImporter:
   - first:
       213: 1610750349252305834
     second: skipping2_3
+  - first:
+      213: -91534763739917252
+    second: skipping2_0
+  - first:
+      213: 5174409952709556342
+    second: skipping2_1
+  - first:
+      213: -1422702549147681771
+    second: skipping2_2
+  - first:
+      213: 8368167713017207621
+    second: skipping2_3
+  - first:
+      213: -2003524945100754876
+    second: skipping2_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -104,19 +119,19 @@ TextureImporter:
       name: skipping2_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1
+        y: 2
+        width: 13
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5ed631a0923abb6d0800000000000000
-      internalID: -2973603732290048539
+      spriteID: c34deaa0e9dcabef0800000000000000
+      internalID: -91534763739917252
       vertices: []
       indices: 
       edges: []
@@ -125,19 +140,19 @@ TextureImporter:
       name: skipping2_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 17
+        y: 7
+        width: 13
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 70d947a2475a23880800000000000000
-      internalID: -8632655617368744697
+      spriteID: 678bf71df623fc740800000000000000
+      internalID: 5174409952709556342
       vertices: []
       indices: 
       edges: []
@@ -146,19 +161,19 @@ TextureImporter:
       name: skipping2_2
       rect:
         serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 33
+        y: 2
+        width: 13
+        height: 19
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5012cf81754b2fdd0800000000000000
-      internalID: -2453700560789167867
+      spriteID: 51c7201c19b814ce0800000000000000
+      internalID: -1422702549147681771
       vertices: []
       indices: 
       edges: []
@@ -167,19 +182,40 @@ TextureImporter:
       name: skipping2_3
       rect:
         serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 49
+        y: 2
+        width: 13
+        height: 17
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa3250598e88a5610800000000000000
-      internalID: 1610750349252305834
+      spriteID: 54b9843d234b12470800000000000000
+      internalID: 8368167713017207621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: skipping2_4
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 2
+        width: 12
+        height: 4
+      alignment: 9
+      pivot: {x: 0.5, y: 0.2}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 440b2a47dac0234e0800000000000000
+      internalID: -2003524945100754876
       vertices: []
       indices: 
       edges: []

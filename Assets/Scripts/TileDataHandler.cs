@@ -41,39 +41,39 @@ public class TileDataHandler {
 
     public static void UpdateNeighbours(TileDataModel model) {
         if (model.land) {
-            world.GetTileData(new Vector(model.coord.x - 1, model.coord.y - 1)).neighbours |= RELATIVE_ADD[0,0];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x - 1, model.coord.y - 1)));
-            world.GetTileData(new Vector(model.coord.x, model.coord.y - 1)).neighbours |= RELATIVE_ADD[1,0];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x, model.coord.y - 1)));
-            world.GetTileData(new Vector(model.coord.x + 1, model.coord.y - 1)).neighbours |= RELATIVE_ADD[2,0];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x + 1, model.coord.y - 1)));
-            world.GetTileData(new Vector(model.coord.x - 1, model.coord.y)).neighbours |= RELATIVE_ADD[0,1];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x - 1, model.coord.y)));
-            world.GetTileData(new Vector(model.coord.x + 1, model.coord.y)).neighbours |= RELATIVE_ADD[2,1];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x + 1, model.coord.y)));
-            world.GetTileData(new Vector(model.coord.x - 1, model.coord.y + 1)).neighbours |= RELATIVE_ADD[0,2];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x - 1, model.coord.y + 1)));
-            world.GetTileData(new Vector(model.coord.x, model.coord.y + 1)).neighbours |= RELATIVE_ADD[1,2];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x, model.coord.y + 1)));
-            world.GetTileData(new Vector(model.coord.x + 1, model.coord.y + 1)).neighbours |= RELATIVE_ADD[2,2];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x + 1, model.coord.y + 1)));
+            world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y - 1)).neighbours |= RELATIVE_ADD[0,0];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y - 1)));
+            world.GetTileData(new Coordinate(model.coord.x, model.coord.y - 1)).neighbours |= RELATIVE_ADD[1,0];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x, model.coord.y - 1)));
+            world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y - 1)).neighbours |= RELATIVE_ADD[2,0];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y - 1)));
+            world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y)).neighbours |= RELATIVE_ADD[0,1];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y)));
+            world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y)).neighbours |= RELATIVE_ADD[2,1];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y)));
+            world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y + 1)).neighbours |= RELATIVE_ADD[0,2];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y + 1)));
+            world.GetTileData(new Coordinate(model.coord.x, model.coord.y + 1)).neighbours |= RELATIVE_ADD[1,2];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x, model.coord.y + 1)));
+            world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y + 1)).neighbours |= RELATIVE_ADD[2,2];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y + 1)));
         } else {
-            world.GetTileData(new Vector(model.coord.x - 1, model.coord.y - 1)).neighbours &= RELATIVE_SUBTRACT[0,0];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x - 1, model.coord.y - 1)));
-            world.GetTileData(new Vector(model.coord.x, model.coord.y - 1)).neighbours &= RELATIVE_SUBTRACT[1,0];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x, model.coord.y - 1)));
-            world.GetTileData(new Vector(model.coord.x + 1, model.coord.y - 1)).neighbours &= RELATIVE_SUBTRACT[2,0];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x + 1, model.coord.y - 1)));
-            world.GetTileData(new Vector(model.coord.x - 1, model.coord.y)).neighbours &= RELATIVE_SUBTRACT[0,1];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x - 1, model.coord.y)));
-            world.GetTileData(new Vector(model.coord.x + 1, model.coord.y)).neighbours &= RELATIVE_SUBTRACT[2,1];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x + 1, model.coord.y)));
-            world.GetTileData(new Vector(model.coord.x - 1, model.coord.y + 1)).neighbours &= RELATIVE_SUBTRACT[0,2];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x - 1, model.coord.y + 1)));
-            world.GetTileData(new Vector(model.coord.x, model.coord.y + 1)).neighbours &= RELATIVE_SUBTRACT[1,2];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x, model.coord.y + 1)));
-            world.GetTileData(new Vector(model.coord.x + 1, model.coord.y + 1)).neighbours &= RELATIVE_SUBTRACT[2,2];
-            UpdateTileIndex(world.GetTileData(new Vector(model.coord.x + 1, model.coord.y + 1)));
+            world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y - 1)).neighbours &= RELATIVE_SUBTRACT[0,0];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y - 1)));
+            world.GetTileData(new Coordinate(model.coord.x, model.coord.y - 1)).neighbours &= RELATIVE_SUBTRACT[1,0];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x, model.coord.y - 1)));
+            world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y - 1)).neighbours &= RELATIVE_SUBTRACT[2,0];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y - 1)));
+            world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y)).neighbours &= RELATIVE_SUBTRACT[0,1];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y)));
+            world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y)).neighbours &= RELATIVE_SUBTRACT[2,1];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y)));
+            world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y + 1)).neighbours &= RELATIVE_SUBTRACT[0,2];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x - 1, model.coord.y + 1)));
+            world.GetTileData(new Coordinate(model.coord.x, model.coord.y + 1)).neighbours &= RELATIVE_SUBTRACT[1,2];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x, model.coord.y + 1)));
+            world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y + 1)).neighbours &= RELATIVE_SUBTRACT[2,2];
+            UpdateTileIndex(world.GetTileData(new Coordinate(model.coord.x + 1, model.coord.y + 1)));
         }
 
         // short i = 0;
@@ -102,7 +102,6 @@ public class TileDataHandler {
 
             if((model.neighbours & bitmask_in[index]) == bitmask_out[index]) {
                 model.UpdateTileIndex(index);
-                // Debug.Log(index);
                 break;
             }
         }

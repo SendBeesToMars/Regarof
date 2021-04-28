@@ -3,18 +3,18 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class World : MonoBehaviour {
-    public Camera camera;
 
-    public float seed;
+    private const short TEST_SIZE = 2;
+
+    public float global_seed;
 
     public Grid grid;
     public Tilemap tilemap;
+    public Tile[] grass_tiles;
 
-    public Tile[] ground_tiles;
-    // public Tile tile;
-    // public Dictionary<vector, Chunk> chunks;
-    public Dictionary<Vector, Chunk> chunks { get; set; }
+    public Dictionary<Coordinate, Chunk> chunks { get; set; }
     
+    //TODO Remove once island generation is final
     public float scale = 0.1f;
     public float magnitude = 0.75f;
     public float border_weight = 0.2f;
@@ -23,100 +23,89 @@ public class World : MonoBehaviour {
     void Start() {
         Seed();
 
-        chunks = new Dictionary<Vector, Chunk>();
-        for (int i = -3; i < 3; i++) {
-            for (int j = -3; j < 3; j++) {
-                chunks.Add(v(i,j), new Chunk(v(i,j), this));
+        TileDataHandler.world = this;
+
+        //TODO Replace with final world loading from save file (all chunks and their tiles to be saved, loading only visible chunks into memory)
+        chunks = new Dictionary<Coordinate, Chunk>();
+        for (int x = -TEST_SIZE; x < TEST_SIZE; x++) {
+            for (int y = -TEST_SIZE; y < TEST_SIZE; y++) {
+                Coordinate chunk_coord = new Coordinate(x,y);
+                chunks.Add(chunk_coord, new Chunk(chunk_coord, this));
             }
         }
 
-        TileDataHandler.world = this;
-
+        //TODO Run once on world creation, and then again for every new chunk created off screen (3x3 around chunk created or relative to existing chunks).
+        //     Will not be run on existing chunks being loaded in
         foreach(Chunk chunk in chunks.Values) {
             for(int x = 0; x < Chunk.CHUNK_DIMENSION; x++) {
                 for(int y = 0; y < Chunk.CHUNK_DIMENSION; y++) {
                     TileDataHandler.UpdateNeighbours(chunk.tiles[x,y]);
                     TileDataHandler.UpdateTileIndex(chunk.tiles[x,y]);
-                    tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), ground_tiles[chunk.tiles[x,y].tile_index]);
+                    tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), grass_tiles[chunk[x,y].tile_index]);
                 }
             }
         }
     }
 
     void FixedUpdate() {
-        
+        //TODO Replace with final chunk loading logic and only redraw tiles modified (3x3 around updated tile) 
         foreach(Chunk chunk in chunks.Values) {
             // chunk.GenerateIsland(scale, magnitude, border_weight, cut_off);
             for(int x = 0; x < Chunk.CHUNK_DIMENSION; x++) {
                 for(int y = 0; y < Chunk.CHUNK_DIMENSION; y++) {
-                    // if (chunk.tiles[x,y].tile_index != -1) {
-                        tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), ground_tiles[chunk.tiles[x,y].tile_index]); 
-                    // } else
-                    //     tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), null);
+                    tilemap.SetTile(new Vector3Int((chunk.coord.x * Chunk.CHUNK_DIMENSION) + x, (chunk.coord.y * Chunk.CHUNK_DIMENSION) + y, 0), grass_tiles[chunk[x,y].tile_index]); 
                 }
             }
         }
-
-        // TileDataHandler.Toggle();
     }
 
-    void LateUpdate() {
-        Vector3Int player = grid.WorldToCell(transform.position);
-        Vector3Int current = grid.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
+    // Use only for debugging purposes
+    // void LateUpdate() {
+    //     // Vector3Int player = grid.WorldToCell(transform.position);
+    //     // Vector3Int current = grid.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
 
-        // Vector3Int grid_position = world_grid.WorldToCell(current);
+    //     // if (Input.GetMouseButtonDown(0)) {
+    //     //     // Debug.Log(GetTileData(v(current.x, current.y)).land);
+    //     // }
+    // }
 
-        // if (Input.GetMouseButtonDown(0)) {
-        //     // Debug.Log(GetTileData(v(current.x, current.y)).land);
-        // }
+    public TileDataModel GetTileData(Coordinate global_tile_coord) {
+        Coordinate chunk_coord = GetChunkCoords(global_tile_coord);
+        Coordinate relative_tile_coord = GetTileCoordsRelativeToChunk(global_tile_coord);
+
+        // TODO Replace with chunk loading logic
+        if(!chunks.ContainsKey(chunk_coord))
+            return new TileDataModel(relative_tile_coord);
+
+        return chunks[chunk_coord][relative_tile_coord.x, relative_tile_coord.y];
     }
 
-    public TileDataModel GetTileData(Vector v) {
-        Vector c = GetChunkCoords(v);
-        Vector v1 = GetTileCoordsRelativeToChunk(v);
-
-        if(!chunks.ContainsKey(c))
-            return new TileDataModel(v1);
-
-        // Debug.Log(c + " " + v + " " + v1 + " " + chunks[c].tiles[v1.x, v1.y]);
-        // Debug.Log(c + " " + v1);
-        return chunks[c].tiles[v1.x, v1.y];
+    public Coordinate GetChunkCoords(Coordinate v) {
+        return new Coordinate(v.x < 0 ? v.x - Chunk.CHUNK_DIMENSION : v.x, v.y < 0 ? v.y - Chunk.CHUNK_DIMENSION : v.y) / Chunk.CHUNK_DIMENSION;
     }
 
-    public Vector GetChunkCoords(Vector v) {
-        return new Vector(v.x < 0 ? v.x - Chunk.CHUNK_DIMENSION : v.x, v.y < 0 ? v.y - Chunk.CHUNK_DIMENSION : v.y) / Chunk.CHUNK_DIMENSION;
-    }
-
-    private Vector GetTileCoordsRelativeToChunk(Vector v) {
+    private Coordinate GetTileCoordsRelativeToChunk(Coordinate v) {
         v.x %= Chunk.CHUNK_DIMENSION;
         v.y %= Chunk.CHUNK_DIMENSION;
-        return new Vector(v.x < 0 ? Chunk.CHUNK_DIMENSION + v.x : v.x, v.y < 0 ? Chunk.CHUNK_DIMENSION + v.y : v.y);
+        return new Coordinate(v.x < 0 ? Chunk.CHUNK_DIMENSION + v.x : v.x, v.y < 0 ? Chunk.CHUNK_DIMENSION + v.y : v.y);
     }
     
+    //TODO Remove once island generation is final
     public void updateChunkIslandScale(float scale) {
         this.scale = scale;
     }
-
     public void updateChunkIslandMagnitude(float magnitude) {
         this.magnitude = magnitude;
     }
-
     public void updateChunkIslandBorder(float border_weight) {
         this.border_weight = border_weight;
     }
-
     public void updateChunkIslandCutOff(float cut_off) {
         this.cut_off = cut_off;
     }
 
-    public static Vector v(int x, int y) {
-        return new Vector(x, y);
-    }
-
     [ContextMenu("Seed")]
     public void Seed() {
-        seed = Random.Range(-2147483.0f, 2147483.0f);
-        // foreach(Chunk chunk in chunks)
-        //     chunk.SeedChunk();
+        global_seed = Random.Range(-2147483.0f, 2147483.0f);
     }
 }

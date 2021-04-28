@@ -5,14 +5,16 @@ using UnityEngine.Tilemaps;
 
 public class MouseBehaviour : MonoBehaviour {
 
-    public Camera camera;
+    public new Camera camera;
 
     public World world;
 
     private Vector3Int previous;
 
-    void Start() {
+    public AudioSource audio_source;
 
+    void Start() {
+        audio_source = GetComponent<AudioSource>();
     }
 
     void LateUpdate() {
@@ -20,11 +22,18 @@ public class MouseBehaviour : MonoBehaviour {
         Vector3Int mouse_coord = world.grid.WorldToCell(camera.ScreenToWorldPoint(Input.mousePosition));
 
         if (Input.GetMouseButtonDown(0)) {
-            Vector tile_coord = new Vector(mouse_coord.x, mouse_coord.y);
-            Debug.Log(tile_coord);
-            Debug.Log(world.GetTileData(tile_coord).land);
+            Coordinate tile_coord = new Coordinate(mouse_coord.x, mouse_coord.y);
             TileDataHandler.Toggle(world.GetTileData(tile_coord));
+            audio_source.Play();
         }
+
+        Coordinate player = new Coordinate(player_coord.x, player_coord.y);
+        TileDataModel model = world.GetTileData(player);
+        if(!model.land) {
+            TileDataHandler.Toggle(model);
+            audio_source.Play();
+        }
+
 
         // if (mouse_coord != previous) {
         //     if(Vector3.Distance(player_coord, mouse_coord) < 2.5 && tilemap_fill.GetTile(mouse_coord) != null) {
