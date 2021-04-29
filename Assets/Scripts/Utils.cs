@@ -14,6 +14,8 @@ public struct Coordinate {
         this.y = y;
     }
 
+    public static Coordinate operator +(Coordinate a, Coordinate b) => new Coordinate(a.x + b.x, a.y + b.y);
+    public static Coordinate operator -(Coordinate a, Coordinate b) => new Coordinate(a.x - b.x, a.y - b.y);
     public static Coordinate operator /(Coordinate a, int b) {
         return new Coordinate((a.x < 0 ? a.x + 1 : a.x) / b, (a.y < 0 ? a.y + 1 : a.y) / b);
     } 
