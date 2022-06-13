@@ -5,12 +5,15 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Vector3 direction;
+    private float speed;
 
     public Animator animator;
     public float max_speed;
+    public float sprint_modifier;
 
     void FixedUpdate() {
         direction = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
+        speed = Input.GetKey(KeyCode.LeftShift) ? max_speed * sprint_modifier : max_speed;
 
         // Debug.Log($"dirs: {direction.x}, {direction.y}");
 
@@ -33,6 +36,6 @@ public class PlayerMovement : MonoBehaviour
         else if(direction.x > 0)
             transform.localRotation = Quaternion.Euler(0, 0, 0);
 
-        transform.position = transform.position + direction.normalized * max_speed * Time.deltaTime;
+        transform.position = transform.position + direction.normalized * speed * Time.deltaTime;
     }
 }

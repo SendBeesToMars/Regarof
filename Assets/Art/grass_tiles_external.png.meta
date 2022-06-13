@@ -165,6 +165,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -174,8 +175,8 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: -1
-    mipBias: -100
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -196,6 +197,8 @@ TextureImporter:
   textureType: 8
   textureShape: 1
   singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
@@ -1226,6 +1229,54 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      grass_tiles_external_43: -1868512840182824102
+      grass_tiles_external_7: -6271514638038387678
+      grass_tiles_external_11: 8123892156383415720
+      grass_tiles_external_21: -8911973643937059059
+      grass_tiles_external_22: -7708863384814044415
+      grass_tiles_external_30: -6154442081436475309
+      grass_tiles_external_39: -4939953880541310452
+      grass_tiles_external_13: 4254485360921043342
+      grass_tiles_external_26: -3408248307716068303
+      grass_tiles_external_20: 1995336088492498156
+      grass_tiles_external_41: 7701283075647547835
+      grass_tiles_external_34: -2118097753663006742
+      grass_tiles_external_19: -3537873186779796044
+      grass_tiles_external_4: 4257067085292594055
+      grass_tiles_external_14: -5073679699159730855
+      grass_tiles_external_15: 5506760813737616048
+      grass_tiles_external_38: 7643427207636901137
+      grass_tiles_external_2: -4486085773285600377
+      grass_tiles_external_9: -1334324974580668936
+      grass_tiles_external_35: -8308198382787476349
+      grass_tiles_external_17: 8575307002799959526
+      grass_tiles_external_45: 5982471349374422604
+      grass_tiles_external_3: -7377830724352113693
+      grass_tiles_external_29: -1094415389083838859
+      grass_tiles_external_42: 7163845992089547388
+      grass_tiles_external_31: -2472473668949623835
+      grass_tiles_external_36: -4215271411350163314
+      grass_tiles_external_18: 2658604904222555487
+      grass_tiles_external_28: -1390255063078448742
+      grass_tiles_external_25: 1782327082144550944
+      grass_tiles_external_0: 8136909281153123942
+      grass_tiles_external_6: 2144039458118824014
+      grass_tiles_external_10: 3193659747264149886
+      grass_tiles_external_16: 4173470287109646986
+      grass_tiles_external_27: 5330967988917443222
+      grass_tiles_external_44: -7712419914510171240
+      grass_tiles_external_12: -170845664028866332
+      grass_tiles_external_23: 1111516910544502913
+      grass_tiles_external_5: -2683684337584245037
+      grass_tiles_external_33: -5699166180110922963
+      grass_tiles_external_37: -4499526342073611330
+      grass_tiles_external_32: -8777303650489334731
+      grass_tiles_external_46: -8090950855295401142
+      grass_tiles_external_40: 3515486619794842756
+      grass_tiles_external_1: 4344867843066677156
+      grass_tiles_external_24: -4175786371556911945
+      grass_tiles_external_8: 5233476587295601412
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

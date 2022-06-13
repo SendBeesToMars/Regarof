@@ -2,8 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.U2D;
+
 public class CameraMovement : MonoBehaviour {
 
+    [SerializeField]
+    private byte ppu;
+
+    public PixelPerfectCamera camera;
     public Transform target;
     public float smoothing;
 
@@ -15,6 +21,8 @@ public class CameraMovement : MonoBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
+        camera.assetsPPU = Input.GetKey(KeyCode.LeftShift) ? ppu/2 : ppu;
+
         if(transform.position != target.position) {
             Vector3 target_position = new Vector3(target.position.x, target.position.y, transform.position.z);
             transform.position = Vector3.Lerp(transform.position, target_position, smoothing);
