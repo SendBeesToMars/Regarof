@@ -9,7 +9,7 @@ public class CameraMovement : MonoBehaviour {
     [SerializeField]
     private byte ppu;
 
-    public PixelPerfectCamera camera;
+    public new PixelPerfectCamera camera;
     public Transform target;
     public float smoothing;
 

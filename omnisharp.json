@@ -3,4 +3,4 @@
       "EnableAnalyzersSupport": true,
       "LocationPaths": ["./NuGet/microsoft.unity.analyzers.1.13.0"]
     }
-  }
+}
