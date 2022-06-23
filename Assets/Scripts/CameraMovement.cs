@@ -6,7 +6,6 @@ using UnityEngine.U2D;
 
 public class CameraMovement : MonoBehaviour {
 
-    [SerializeField]
     private byte ppu;
 
     public new PixelPerfectCamera camera;
@@ -16,12 +15,13 @@ public class CameraMovement : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        
+        ppu = (byte)camera.assetsPPU;
     }
 
     // Update is called once per frame
     void LateUpdate() {
         camera.assetsPPU = Input.GetKey(KeyCode.LeftShift) ? ppu/2 : ppu;
+        camera.assetsPPU = Input.GetKey(KeyCode.LeftControl) ? ppu*4 : ppu;
 
         if(transform.position != target.position) {
             Vector3 target_position = new Vector3(target.position.x, target.position.y, transform.position.z);

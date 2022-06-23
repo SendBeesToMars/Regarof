@@ -1395,7 +1395,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5afeb1b5694c800449c3db281508f920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ppu: 6
   camera: {fileID: 519420033}
   target: {fileID: 1953380858}
   smoothing: 1
@@ -1426,7 +1425,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 16
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1469,13 +1468,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a160d838ff8b4b4693ac20007e008c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AssetsPPU: 12
-  m_RefResolutionX: 320
-  m_RefResolutionY: 180
+  m_AssetsPPU: 16
+  m_RefResolutionX: 480
+  m_RefResolutionY: 270
   m_UpscaleRT: 0
-  m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
+  m_PixelSnapping: 1
+  m_CropFrameX: 1
+  m_CropFrameY: 1
   m_StretchFill: 0
 --- !u!1 &714346636
 GameObject:
