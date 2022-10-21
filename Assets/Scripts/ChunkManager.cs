@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class ChunkManager : MonoBehaviour {
 
-    private const short CHUNK_SIZE = 16;
+    private const short CHUNK_SIZE = 24;
 
     private List<Chunk> chunksToUpdate;
     private List<Chunk> chunksToRender;

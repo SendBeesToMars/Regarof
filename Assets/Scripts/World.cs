@@ -8,6 +8,8 @@ public class World : MonoBehaviour {
 
     public float global_seed;
 
+    public MapGenerator mapGenerator;
+
     public Grid grid;
     public Tilemap tilemap;
     public Tile[] grass_tiles;
@@ -22,6 +24,8 @@ public class World : MonoBehaviour {
     
     void Start() {
         Seed();
+
+        mapGenerator = FindObjectOfType<MapGenerator>();
 
         TileDataHandler.world = this;
 

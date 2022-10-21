@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class Chunk {
 
-    public const int CHUNK_DIMENSION = 16;
+    public const int CHUNK_DIMENSION = 24;
 
     private World world;
 
@@ -26,7 +26,16 @@ public class Chunk {
         }
         
         // border_map = GenerateBorderMap(0.4f);
-        GenerateIsland(world.scale, world.magnitude, world.border_weight, world.cut_off);
+        // GenerateIsland(world.scale, world.magnitude, world.border_weight, world.cut_off);
+
+        byte[,] m = world.mapGenerator.GenerateMap();
+
+        for (byte x = 0; x < CHUNK_DIMENSION; x++) {
+            for (byte y = 0; y < CHUNK_DIMENSION; y++) {
+                tiles[x,y].land = (m[x,y] == 1);
+            }
+        }
+        
     }
 
     // To be run once during chunk creation (made private once generation is final)
