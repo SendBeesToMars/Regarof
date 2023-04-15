@@ -20,8 +20,13 @@ public class CameraMovement : MonoBehaviour {
 
     // Update is called once per frame
     void LateUpdate() {
-        camera.assetsPPU = Input.GetKey(KeyCode.LeftShift) ? ppu/2 : ppu;
-        camera.assetsPPU = Input.GetKey(KeyCode.LeftControl) ? ppu*4 : ppu;
+        if(Input.GetKey(KeyCode.LeftControl)) {
+            camera.assetsPPU = ppu * 4;
+        } else if(Input.GetKey(KeyCode.LeftShift)) {
+            camera.assetsPPU = ppu / 4;
+        } else {
+            camera.assetsPPU = ppu;
+        }
 
         if(transform.position != target.position) {
             Vector3 target_position = new Vector3(target.position.x, target.position.y, transform.position.z);
