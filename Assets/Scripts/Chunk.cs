@@ -3,7 +3,7 @@ using UnityEngine.Tilemaps;
 
 public class Chunk {
 
-    public const int CHUNK_DIMENSION = 16;
+    public const int CHUNK_DIMENSION = 32;
 
     private World world;
 

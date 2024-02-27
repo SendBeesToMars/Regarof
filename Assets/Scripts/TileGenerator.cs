@@ -25,8 +25,8 @@ public class TileGenerator : MonoBehaviour {
 
     public int[,] ground_map;
 
-    private int island_width = 16;
-    private int island_height = 16;
+    private int island_width = 32;
+    private int island_height = 32;
     private int island_offset;
 
     private byte[] bitmask_in;
